@@ -14,7 +14,6 @@ loadMoreBtn.addEventListener('click', loadMoreImages);
 async function handleSubmitForm(event) {
     event.preventDefault();
     gallery.innerHTML = '';
-    page = 1;
 
     const searchQuery = form.querySelector('input[name="searchQuery"]').value;
 
@@ -23,6 +22,18 @@ async function handleSubmitForm(event) {
         return;
     }
 
+    page = 1;
+
+    await performSearch(searchQuery);
+}
+
+function loadMoreImages() {
+    page += 1;
+    const searchQuery = form.querySelector('input[name="searchQuery"]').value;
+    performSearch(searchQuery);
+}
+
+async function performSearch(searchQuery) {
     try {
         const response = await axios.get('https://pixabay.com/api/', {
             params: {
@@ -74,9 +85,4 @@ function createImageCard(image) {
             </div>
         </div>
     `;
-}
-
-function loadMoreImages() {
-    page += 1;
-    handleSubmitForm(new Event('submit'));
 }
